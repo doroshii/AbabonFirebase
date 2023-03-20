@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+	<!-- Bootstrap theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<title>Login</title>
+</head>
+
+<style>
+	@import url('https://fonts.googleapis.com/css?family=Poppins');
+  
+  
+  * {
+	  margin: 0;
+	  padding: 0;
+	  box-sizing: border-box;
+	  font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('moon.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+  position: absolute;
+  width: 400px;
+  height: 440px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, .5);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  /* margin-right: -15px; */
+  margin-left: -250px;
+}
+
+.form-control {
+width: 350px;
+}
+
+.container h3 {
+font-size: 2em;
+  color: #f7f3f3;
+  text-align: center;
+  padding-left: 120px;
+}
+
+.container label {
+  color: #162938;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+</style>
+
+<body>
+
+<div class="navbar-header">
+  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false" aria-controls="navbar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+  </button>
+</div>
+<div class="navbar-collapse collapse"  >
+    <ul class="nav navbar-nav navbar-right">
+         <li><a href="#" id="logout" style="display: none;">Log Out</a></li>
+    </ul>
+</div>
+<br>
+<div class="container">	
+	<div class="col-sm-4">
+	</div>
+	<form name="login_form" id="login_form" method="post" action="#" enctype="multipart/form-data" >
+	<div class="col-sm-4">
+    <h3>Login</h3>
+		<div class="form-group">
+	      <label for="email">Email</label>
+		  <input type="text" name="login_email" id="login_email" class="form-control" placeholder="Enter your email">
+		</div>
+		
+		<div class="form-group">
+	      <label for="password">Password</label>
+		  <input type="password" name="login_password" id="login_password" class="form-control"  placeholder="Enter your password">
+		</div>
+		<button type="button" id="login" name="login" class="btn btn-success">Login</button>
+        <span class="badge rounded-pill bg-secondary"><a href="register.html" class="badge badge-secondary">Don't have an account?</span></a>
+	</div><!-- end col -->
+	
+  </div><!--  end row -->		
+  </form>
+</div>
+<br>
+</body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyCaXgBZcBkfZRF5X-YPNFhvY-C7ufceAWg",
+    authDomain: "ababonfirebase.firebaseapp.com",
+    databaseURL: "https://ababonfirebase-default-rtdb.firebaseio.com",
+    projectId: "ababonfirebase",
+    storageBucket: "ababonfirebase.appspot.com",
+    messagingSenderId: "809851666126",
+    appId: "1:809851666126:web:ef2f47cb874fd27380da9f",
+    measurementId: "G-DB5B08LYHE"
+  };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth();
+    console.log(app);
+
+    
+
+
+    //----- Login code start	  
+    document.getElementById("login").addEventListener("click", function() {
+        var email =  document.getElementById("login_email").value;
+        var password = document.getElementById("login_password").value;
+
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log(user);
+          alert(user.email+" Login successfully!!!");
+           window.location.href = "index.html";
+          document.getElementById('logout').style.display = 'block';
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorMessage);
+          alert(errorMessage);
+        });		  		  
+    });
+    //----- End
+
+    //----- Logout code start	  
+    document.getElementById("logout").addEventListener("click", function() {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            console.log('Sign-out successful.');
+            alert('Sign-out successful.');
+            document.getElementById('logout').style.display = 'none';
+          }).catch((error) => {
+            // An error happened.
+            console.log('An error happened.');
+          });		  		  
+    });
+    //----- End
+
+  </script>
+</html>
