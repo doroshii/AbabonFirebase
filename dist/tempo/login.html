@@ -100,7 +100,7 @@ font-size: 2em;
 		  <input type="password" name="login_password" id="login_password" class="form-control"  placeholder="Enter your password">
 		</div>
 		<button type="button" id="login" name="login" class="btn btn-success">Login</button>
-        <span class="badge rounded-pill bg-secondary"><a href="register.html" class="badge badge-secondary">Don't have an account?</span></a>
+        <span class="badge rounded-pill bg-secondary"><a href="index.html" class="badge badge-secondary">Don't have an account?</span></a>
 	</div><!-- end col -->
 	
   </div><!--  end row -->		
@@ -145,7 +145,7 @@ font-size: 2em;
           const user = userCredential.user;
           console.log(user);
           alert(user.email+" Login successfully!!!");
-           window.location.href = "index.html";
+           window.location.href = "home.html";
           document.getElementById('logout').style.display = 'block';
           // ...
         })

@@ -1,0 +1,25 @@
+[debug] [2023-03-20T09:51:34.320Z] ----------------------------------------------------------------------
+[debug] [2023-03-20T09:51:34.329Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\djaba\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2023-03-20T09:51:34.330Z] CLI Version:   11.24.0
+[debug] [2023-03-20T09:51:34.331Z] Platform:      win32
+[debug] [2023-03-20T09:51:34.331Z] Node Version:  v18.14.2
+[debug] [2023-03-20T09:51:34.563Z] Time:          Mon Mar 20 2023 17:51:34 GMT+0800 (Philippine Standard Time)
+[debug] [2023-03-20T09:51:34.564Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-03-20T09:51:34.877Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-03-20T09:51:34.878Z] > authorizing via signed-in user (dj.ababon@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\djaba\OneDrive\Desktop\AbabonFireBase
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
