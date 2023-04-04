@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            const firebaseConfig = {
+                apiKey: "AIzaSyCaXgBZcBkfZRF5X-YPNFhvY-C7ufceAWg",
+                authDomain: "ababonfirebase.firebaseapp.com",
+                databaseURL: "https://ababonfirebase-default-rtdb.firebaseio.com",
+                projectId: "ababonfirebase",
+                storageBucket: "ababonfirebase.appspot.com",
+                messagingSenderId: "809851666126",
+                appId: "1:809851666126:web:ef2f47cb874fd27380da9f",
+                measurementId: "G-DB5B08LYHE"
+              };
+            firebase.initializeApp(firebaseConfig);
+            var db = firebase.firestore();
+            
+            db.collection("todos").onSnapshot((querySnapshot) => {
+                querySnapshot.docChanges().forEach((change) => {
+                    var todo = change.doc.data().todo;
+                    var done = change.doc.data().done;
+
+                    var todo_html = "<div class='todo'>" + 
+                        "<div class='todo-text'>" + (done ? "<del>"+todo+"</del>" : "<strong>"+todo+"</strong>") + "</div>" + 
+                        "<div class='todo-buttons'>" + 
+                        "<button doc-id='"+ change.doc.id +"' class='done'>done</button>"+
+                        "<button doc-id='"+ change.doc.id +"' class='edit'> edit</button>"+
+                        "<button doc-id='"+ change.doc.id +"' class='delete'>delete</button>" +
+                        "</div>" +
+                        "</div>";
+        
+        if (change.type === "added") {
+            $("#todos").append("<li data-key='"+ change.doc.id +"'>"+todo_html+"</li>");
+        }
+        if (change.type === "modified") {
+            $("#todos").children("li[data-key='"+ change.doc.id +"']").html(todo_html);
+        }
+        if (change.type === "removed") {
+            $("#todos").children("li[data-key='"+ change.doc.id +"']").remove();
+        }
+        
+
+
+                    
+                });
+            });
+
+            $(".new-task-form").submit(function(e){
+                e.preventDefault();
+                var new_task = $(".new-task").val();
+                db.collection("todos").add({
+                    todo: new_task,
+                    done: false
+                })
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
+                $(".new-task").val("");
+            });
+
+
+            $(document).delegate('.done','click',function(){
+                var doc_id = $(this).attr('doc-id');
+                db.collection("todos").doc(doc_id).update({
+                    done: true,
+                })
+                .then(() => {
+                    console.log("Document successfully written!");
+                })
+                .catch((error) => {
+                    console.error("Error writing document: ", error);
+                });
+            });
+
+            
+            $(document).delegate('.edit','click',function(){
+                var doc_id = $(this).attr('doc-id');
+                var new_todo = prompt("Enter new task name");
+                if (new_todo != null && new_todo != "") {
+                    db.collection("todos").doc(doc_id).update({
+                        todo: new_todo,
+                    })
+                    .then(() => {
+                        console.log("Document successfully updated!");
+                    })
+                    .catch((error) => {
+                        console.error("Error updating document: ", error);
+                    });
+                }
+        });
+
+            $(document).delegate('.delete','click',function(){
+                var doc_id = $(this).attr('doc-id');
+                db.collection("todos").doc(doc_id).delete().then(() => {
+                    console.log("Document successfully deleted!");
+                }).catch((error) => {
+                    console.error("Error removing document: ", error);
+                });
+            });
+
+
+        });
+    </script>
+</head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins');
+  
+  
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+        font-family: sans-serif;
+        font-size: 13px;
+        margin: 0 50px;
+        min-height: 100vh;
+        background: url('moon.png') no-repeat;
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+      
+    .app {
+        background-color: #fff;
+        width: 400px;
+        height: 500px;
+        border: 5px solid #abcea1;
+        border-radius: 8px;
+        padding: 15px;
+        overflow-y: scroll;
+    }
+
+    .app::-webkit-scrollbar {
+        width: 0 !important;
+    }
+
+    .new-task-form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(171, 206, 161, 0.35);
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .todo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
+    .todo-text {
+        flex: 1;
+        margin-right: 10px;
+    }
+    .todo-buttons {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .todo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
+    .todo-text {
+        flex: 1;
+        margin-right: 10px;
+    }
+    .todo-buttons {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+    .todo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
+    .todo-text {
+        flex: 1;
+        margin-right: 10px;
+    }
+    .todo-buttons {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+    .todo-buttons button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        background-color: #81cca2;
+        color: #0c0c0c;
+        font-size: 13px;
+        margin-right: 5px;
+        cursor: pointer;
+        transition: background-color 0.5s, color 0.5s;
+        border-radius: 5px;
+        padding: 5px 10px;
+        background-image: linear-gradient(to bottom right, #fff, #eee);
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .todo-buttons button:hover {
+        background-color: #ddd;
+        color: #000;
+        background-image: none;
+        box-shadow: none;
+    }
+    
+    .todo-buttons button:focus {
+        outline: none;
+    }
+    .todo-buttons .done i {
+        color: green;
+    }
+    .todo-buttons .edit i {
+        color: blue;
+    }
+    .todo-buttons .delete i {
+        color: red;
+    }
+    
+    
+    
+      
+</style>
+<body>
+    
+    <div class="app">
+        <button type="button" class="btn btn-light"><a href="home.html">Back to Home</a></button>
+        <br>
+        <br>
+        <h4 class="mb-3">To-Do List</h4>
+        <form class="new-task-form">
+            <input placeholder="Enter Task Name Here.." required class="new-task" type="text" />
+            <button type="submit">Add Task</button>
+        </form>
+        <h5 class="text-center my-3"><strong>Tasks</strong></h5>
+        <br>
+        <ol id="todos">
+            
+        </ol>
+    </div>
+    
+</body>
+
+</html>
